@@ -23,7 +23,7 @@ def index(request):
         correct_id = request.POST.get('correct_id')
         selected_id = request.POST.get('selected_id')
 
-        if correct_id != selected_id:
+        if correct_id != selected_id or Politician.objects.count() - len(answered_politician_ids) <= 1:
             lost = True
             politicians = politicians.filter(id__in=[correct_id, selected_id])
             correct_politician = Politician.objects.filter(id=correct_id).first()
