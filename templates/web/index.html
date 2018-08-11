@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Pažink politiką</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'css/custom.min.css' %}">
+</head>
+<body>
+<div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+    <div class="container">
+        <a href="/" class="navbar-brand">Pažink politiką</a>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <div class="page-header" id="banner">
+        <h1>Pažink politiką</h1>
+        <p class="lead">Pažink visus seimo narius</p>
+    </div>
+
+    <!-- Navbar
+    ================================================== -->
+    <div class="bs-docs-section clearfix">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header text-center">
+                    <h1 id="navbars">{{ correct_politician.full_name }}</h1>
+                </div>
+                {% if not lost %}
+                    <div class="row">
+                        {% for politician in politicians %}
+                            <form class="col-sm-6" method="post" onclick="this.submit()">
+                                {% csrf_token %}
+                                <input type="hidden" name="correct_id" value="{{ correct_politician.id }}">
+                                <input type="hidden" name="selected_id" value="{{ politician.id }}">
+                                <input type="hidden" name="answered_politician_ids"
+                                       value="{{ answered_ids|join:"," }}">
+
+                                <div class="card text-white {% cycle 'bg-info' 'bg-success' %} mb-3">
+                                    <div class="card-body text-center">
+                                        <img src="{{ politician.photo_url }}">
+                                    </div>
+                                </div>
+                            </form>
+                        {% endfor %}
+                    </div>
+                    <h2 class="text-center">Atsakyta: {{ answered_ids|length }}</h2>
+                {% else %}
+                    <div class="bs-docs-section">
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="bs-component">
+                                    <div class="jumbotron">
+                                        <h1 class="display-3 text-center">Pralaimėjai</h1>
+                                        <p class="lead text-center">Atsakei <strong>{{ answered_ids|length }}</strong>
+                                            teisingai</p>
+                                        <hr class="my-4">
+                                        <div class="row">
+                                            {% for politician in politicians %}
+                                                <div class="col-sm-6">
+                                                    <div class="card text-white {% cycle 'bg-info' 'bg-success' %} mb-3">
+                                                        <div class="card-header">
+                                                            <div class="card-title">
+                                                                {{ politician.full_name }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body text-center">
+                                                            <img src="{{ politician.photo_url }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <p class="lead">
+                                            <a class="btn btn-primary btn-lg btn-block" href="/" role="button">
+                                                Žaisti dar kartą
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="row">
+            <div class="col-lg-12">
+
+                <p>Made by <a href="https://www.linkedin.com/in/vycius/">Karolis Vyčius</a> with theme <a
+                        href="http://thomaspark.co">Thomas Park</a>.</p>
+                <p>Code released under the <a
+                        href="https://github.com/thomaspark/bootswatch/blob/master/LICENSE">MIT
+                    License</a>.</p>
+                <p>Based on <a href="https://getbootstrap.com" rel="nofollow">Bootstrap</a>. Icons from <a
+                        href="http://fontawesome.io/" rel="nofollow">Font Awesome</a>. Web fonts from <a
+                        href="https://fonts.google.com/" rel="nofollow">Google</a>.</p>
+
+            </div>
+        </div>
+
+    </footer>
+
+
+</div>
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
