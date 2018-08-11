@@ -3,3 +3,4 @@ Pillow>=5.2,<5.3
 uWSGI==2.0.17.1
 psycopg2-binary==2.7.5
 gunicorn>=19.9,<19.10
+django-ipware==2.1.0

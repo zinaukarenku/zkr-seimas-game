@@ -2,12 +2,16 @@ from random import randint
 
 from django.db.models import F
 from django.shortcuts import render
+from ipware import get_client_ip
 
-from game.models import Politician
+from game.models import Politician, GameOverStatistics
 from game.utils import try_parse_int
 
 
 def index(request):
+    client_ip, _ = get_client_ip(request)
+    user_agent = request.META.get('HTTP_USER_AGENT')
+
     lost = False
     answered_politician_ids = []
     correct_politician = None
@@ -23,6 +27,15 @@ def index(request):
             lost = True
             politicians = politicians.filter(id__in=[correct_id, selected_id])
             correct_politician = Politician.objects.filter(id=correct_id).first()
+            selected_politician = Politician.objects.filter(id=selected_id).first()
+
+            game_over = GameOverStatistics()
+            game_over.correct_politician = correct_politician
+            game_over.selected_politician = selected_politician
+            game_over.user_ip = client_ip
+            game_over.user_agent = user_agent
+            game_over.correct_count = len(answered_politician_ids)
+            game_over.save()
         else:
             answered_politician_ids.append(selected_id)
             politicians = politicians.exclude(id__in=answered_politician_ids)
