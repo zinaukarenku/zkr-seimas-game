@@ -18,8 +18,8 @@ def index(request):
     politicians = Politician.objects.all()
     if request.method == 'POST':
         answered_politician_ids = request.POST.get('answered_politician_ids', '') or ''
-        answered_politician_ids = [try_parse_int(i) for i in answered_politician_ids.strip().split(',') if
-                                   try_parse_int(i) is not None]
+        answered_politician_ids = list([try_parse_int(i) for i in answered_politician_ids.strip().split(',') if
+                                        try_parse_int(i) is not None])
         correct_id = request.POST.get('correct_id')
         selected_id = request.POST.get('selected_id')
 
